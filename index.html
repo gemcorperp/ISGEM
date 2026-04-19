@@ -1253,65 +1253,121 @@
 
     /* Tablet (≤ 900px) */
     @media (max-width: 900px) {
-      .hero-content {
-        flex-direction: column;
-        gap: 40px;
-        padding: 0 24px;
-      }
+      .hero-content { flex-direction: column; gap: 40px; padding: 0 24px; }
       .hero-left { max-width: 100%; }
-      .card-swap-wrapper {
-        width: 100%;
-        max-width: 500px;
-        height: 380px;
-      }
+      .card-swap-wrapper { width: 100%; max-width: 500px; height: 380px; }
       .cs-card { width: 85%; max-width: 380px; }
-      #sobre {
-        flex-direction: column;
-        gap: 40px;
-        padding: 60px 24px;
-      }
+      #sobre { flex-direction: column; gap: 40px; padding: 60px 24px; }
       .sobre-stats { flex-direction: row; justify-content: center; gap: 40px; }
       #instagram-section { flex-direction: column; padding: 60px 24px; gap: 32px; }
-      #instagram-section img { width: 60vw !important; max-width: 320px; }
+      #instagram-section img { width: 55vw !important; max-width: 300px; }
       .tilted-row { gap: 24px; padding: 40px 24px; }
       .preco-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
       section { padding: 60px 24px; }
+      .steps-grid { grid-template-columns: 1fr; gap: 32px; }
+      .steps-grid::before { display: none; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
     }
 
     /* Mobile (≤ 600px) */
     @media (max-width: 600px) {
-      header { padding: 16px 20px; }
+      /* Header */
+      header { padding: 14px 16px; gap: 8px; }
       .header-tagline { display: none; }
+      header h1 img { height: 32px !important; }
+      .sm-toggle-btn { padding: 8px 16px; font-size: 0.85rem; }
 
-      .hero { height: auto; padding: 60px 0 40px; }
-      .hero-content { padding: 0 20px; gap: 32px; }
-      .card-swap-wrapper { height: 320px; max-width: 100%; }
-      .cs-card { width: 90%; height: 240px; }
-      .cs-card-body h3 { font-size: 1.1rem; }
-      .cs-card-body p  { font-size: 0.85rem; }
+      /* Hero */
+      .hero { height: auto; padding: 48px 0 32px; }
+      .hero-content { padding: 0 16px; gap: 28px; }
+      .hero-tagline strong { font-size: clamp(1.5rem, 6vw, 2rem); }
+      .card-swap-wrapper { height: 280px; max-width: 100%; }
+      .cs-card { width: 92%; height: 220px; }
+      .cs-card-body { padding: 20px; gap: 10px; }
+      .cs-card-body h3 { font-size: 1rem; }
+      .cs-card-body p  { font-size: 0.82rem; }
+      .cs-outer-title { font-size: 0.75rem; }
 
+      /* Tilted cards — desativa tilt no touch */
       .tilted-card-figure,
-      .tilted-card-inner { width: 240px; height: 240px; }
-      .tilted-row { gap: 20px; padding: 32px 16px; }
+      .tilted-card-inner { width: 100%; max-width: 320px; height: 220px; }
+      .tilted-row { flex-direction: column; align-items: center; gap: 16px; padding: 24px 16px; }
+      .tilted-card-overlay p { opacity: 1; transform: translateY(0); }
+      .tilted-card-overlay { background: rgba(0,0,0,0.45); }
 
-      #sobre { padding: 48px 20px; }
-      .sobre-stats { flex-direction: column; align-items: center; gap: 24px; }
+      /* Seções gerais */
+      section { padding: 48px 16px; }
+      #sobre { padding: 48px 16px; }
+      #animacoes { padding: 48px 16px !important; }
+      #como-funciona { padding: 48px 16px; }
+      #diferenciais { padding: 48px 16px; }
+      #faq { padding: 48px 16px; }
+      #portfolio { padding: 48px 16px; }
+      #tecnologias { padding: 48px 16px; }
+      #precos { padding: 48px 16px; }
+      #contact { padding: 48px 16px; }
 
-      #instagram-section { padding: 48px 20px; gap: 24px; }
-      #instagram-section img { width: 80vw !important; }
+      /* Instagram */
+      #instagram-section { padding: 40px 16px !important; gap: 20px; flex-direction: column; }
+      #instagram-section img { width: 70vw !important; max-width: 260px; }
 
-      #depoimentos,
-      #precos,
-      #contact { padding: 48px 20px; }
+      /* Demo grid */
+      .demo-grid { grid-template-columns: 1fr; gap: 16px; }
+      .demo-counters { gap: 12px; }
+      .demo-num { font-size: 1.5rem; }
 
-      .dep-grid { grid-template-columns: 1fr; }
+      /* Steps */
+      .steps-grid { grid-template-columns: 1fr; gap: 28px; }
+      .steps-grid::before { display: none; }
+      .step-num { width: 56px; height: 56px; font-size: 1.2rem; }
 
-      .sm-prelayers,
-      .sm-panel { width: 100%; }
+      /* Diferenciais */
+      .dif-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .dif-card { padding: 20px 16px; }
 
+      /* FAQ */
+      .faq-q { font-size: 0.9rem; padding: 16px 0; }
+
+      /* Portfólio */
+      .port-grid { grid-template-columns: 1fr; }
+      .port-card-overlay { opacity: 1; }
+
+      /* Tech pills */
+      .tech-pill { padding: 8px 14px; font-size: 0.82rem; }
+
+      /* Preços */
+      .preco-grid { grid-template-columns: 1fr; max-width: 100%; }
+      .preco-card { padding: 28px 20px; }
+
+      /* Contato */
+      .contact-form input,
+      .contact-form textarea { padding: 12px 14px; font-size: 0.9rem; }
       .contact-wpp { padding: 12px 16px; font-size: 0.9rem; }
 
-      footer { padding: 24px 20px; font-size: 0.85rem; }
+      /* Menu lateral — tela cheia no mobile */
+      .sm-prelayers,
+      .sm-panel { width: 100% !important; }
+      .sm-panel { padding: 70px 28px 32px; }
+      .sm-panel-item { font-size: clamp(1.8rem, 8vw, 2.8rem); }
+
+      /* Rodapé */
+      .footer-full { padding: 40px 16px 24px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
+
+      /* Cookie */
+      #cookie-bar { flex-direction: column; text-align: center; padding: 16px; }
+
+      /* Scroll reveal — menos deslocamento no mobile */
+      .reveal { transform: translateY(20px); }
+    }
+
+    /* Muito pequeno (≤ 380px) */
+    @media (max-width: 380px) {
+      .sm-toggle-btn { padding: 7px 12px; font-size: 0.78rem; }
+      .dif-grid { grid-template-columns: 1fr; }
+      .card-swap-wrapper { height: 240px; }
+      .cs-card { height: 190px; }
     }
 
   </style>
@@ -1883,15 +1939,16 @@
   (function initTiltedCards() {
     const amplitude = 14;
     const scaleHover = 1.08;
+    const isMobile = () => window.innerWidth <= 600;
 
     document.querySelectorAll('.tilted-card-figure').forEach(fig => {
       const inner   = fig.querySelector('.tilted-card-inner');
       const caption = fig.querySelector('.tilted-card-caption');
       const text    = fig.dataset.caption || '';
-
       caption.textContent = text;
 
       fig.addEventListener('mousemove', e => {
+        if (isMobile()) return;
         const rect = inner.getBoundingClientRect();
         const ox = e.clientX - rect.left - rect.width / 2;
         const oy = e.clientY - rect.top  - rect.height / 2;
@@ -1907,6 +1964,14 @@
         inner.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
         caption.style.opacity = '0';
       });
+
+      // touch: tap para mostrar overlay
+      fig.addEventListener('touchstart', () => {
+        inner.style.transform = `scale(${scaleHover})`;
+      }, { passive: true });
+      fig.addEventListener('touchend', () => {
+        setTimeout(() => inner.style.transform = 'scale(1)', 400);
+      }, { passive: true });
     });
   })();
 
