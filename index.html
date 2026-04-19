@@ -1277,39 +1277,42 @@
       header h1 img { height: 32px !important; }
       .sm-toggle-btn { padding: 8px 16px; font-size: 0.85rem; }
 
-      /* Hero */
-      .hero { height: auto; padding: 48px 0 32px; }
-      .hero-content { padding: 0 16px; gap: 28px; }
-      .hero-tagline strong { font-size: clamp(1.5rem, 6vw, 2rem); }
-      .card-swap-wrapper { height: 280px; max-width: 100%; }
-      .cs-card { width: 92%; height: 220px; }
-      .cs-card-body { padding: 20px; gap: 10px; }
+      /* Hero — empilha tagline + card */
+      .hero { height: auto; padding: 32px 0 24px; }
+      .hero-content { flex-direction: column; padding: 0 16px; gap: 24px; }
+      .hero-left { max-width: 100%; }
+      .hero-tagline strong { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+
+      /* Card swap — tamanho proporcional à tela */
+      .card-swap-wrapper {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 4/3;
+        min-height: 220px;
+      }
+      .cs-card { width: 88%; height: 75%; }
+      .cs-card-body { padding: 16px; gap: 8px; }
       .cs-card-body h3 { font-size: 1rem; }
       .cs-card-body p  { font-size: 0.82rem; }
-      .cs-outer-title { font-size: 0.75rem; }
+      .cs-outer-title { font-size: 0.72rem; }
+      .cs-outer-url-bar { padding: 3px 8px; margin: 0 8px; }
 
-      /* Tilted cards — desativa tilt no touch */
+      /* Tilted cards */
       .tilted-card-figure,
-      .tilted-card-inner { width: 100%; max-width: 320px; height: 220px; }
+      .tilted-card-inner { width: 100%; max-width: 100%; height: 200px; }
       .tilted-row { flex-direction: column; align-items: center; gap: 16px; padding: 24px 16px; }
       .tilted-card-overlay p { opacity: 1; transform: translateY(0); }
       .tilted-card-overlay { background: rgba(0,0,0,0.45); }
 
       /* Seções gerais */
-      section { padding: 48px 16px; }
-      #sobre { padding: 48px 16px; }
-      #animacoes { padding: 48px 16px !important; }
-      #como-funciona { padding: 48px 16px; }
-      #diferenciais { padding: 48px 16px; }
-      #faq { padding: 48px 16px; }
-      #portfolio { padding: 48px 16px; }
-      #tecnologias { padding: 48px 16px; }
-      #precos { padding: 48px 16px; }
-      #contact { padding: 48px 16px; }
+      section { padding: 40px 16px; }
+      #sobre, #animacoes, #como-funciona, #diferenciais,
+      #faq, #portfolio, #tecnologias, #precos, #contact { padding: 40px 16px !important; }
 
       /* Instagram */
       #instagram-section { padding: 40px 16px !important; gap: 20px; flex-direction: column; }
-      #instagram-section img { width: 70vw !important; max-width: 260px; }
+      #instagram-section img { width: 65vw !important; max-width: 240px; }
 
       /* Demo grid */
       .demo-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -1355,19 +1358,26 @@
       .footer-grid { grid-template-columns: 1fr; gap: 28px; }
       .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
 
-      /* Cookie */
-      #cookie-bar { flex-direction: column; text-align: center; padding: 16px; }
+      /* Cookie — fica na base sem sobrepor conteúdo */
+      #cookie-bar {
+        flex-direction: column;
+        text-align: center;
+        padding: 16px;
+        bottom: 12px;
+        width: calc(100% - 32px);
+        font-size: 0.78rem;
+      }
 
-      /* Scroll reveal — menos deslocamento no mobile */
-      .reveal { transform: translateY(20px); }
+      /* Scroll reveal */
+      .reveal { transform: translateY(16px); }
     }
 
     /* Muito pequeno (≤ 380px) */
     @media (max-width: 380px) {
       .sm-toggle-btn { padding: 7px 12px; font-size: 0.78rem; }
       .dif-grid { grid-template-columns: 1fr; }
-      .card-swap-wrapper { height: 240px; }
-      .cs-card { height: 190px; }
+      .card-swap-wrapper { min-height: 180px; }
+      .cs-card { height: 72%; }
     }
 
   </style>
@@ -2183,7 +2193,7 @@
     document.getElementById('cookie-bar').classList.remove('show');
   }
   if (!localStorage.getItem('gem_cookies')) {
-    setTimeout(() => document.getElementById('cookie-bar').classList.add('show'), 2000);
+    setTimeout(() => document.getElementById('cookie-bar').classList.add('show'), 4000);
   }
 
   // ── FAQ ──
