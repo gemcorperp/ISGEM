@@ -1,0 +1,2299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GEM ERP</title>
+  <link rel="icon" href="GEM FOTO.png" type="image/png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* ── INTRO ── */
+    #intro {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      transition: opacity 0.8s ease;
+    }
+    #intro.hide { opacity: 0; pointer-events: none; }
+    #intro-text {
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-align: center;
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .split-char {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(40px);
+      will-change: transform, opacity;
+    }
+
+    /* ── RAIO ── */
+    #intro-text {
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-align: center;
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: relative;
+    }
+    #lightning {
+      position: absolute;
+      top: 0; left: -20%;
+      width: 60px;
+      height: 100%;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(0,170,255,0.08) 20%,
+        rgba(0,170,255,0.9) 48%,
+        rgba(180,230,255,1) 50%,
+        rgba(0,170,255,0.9) 52%,
+        rgba(0,170,255,0.08) 80%,
+        transparent 100%
+      );
+      filter: blur(3px);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 10;
+    }
+    #lightning.fire {
+      animation: lightningRun 0.55s cubic-bezier(.4,0,.2,1) forwards;
+    }
+    @keyframes lightningRun {
+      0%   { left: -20%; opacity: 0; }
+      5%   { opacity: 1; }
+      95%  { opacity: 1; }
+      100% { left: 115%; opacity: 0; }
+    }
+    .split-space { display: inline-block; width: 0.35em; }
+
+    /* ── SITE ── */
+    #site { opacity: 0; transition: opacity 0.8s ease; position: relative; z-index: 1; }
+    #site.show { opacity: 1; }
+
+    #header-wrap { position: relative; }
+    header { padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 20; }
+    header h1 { color: #00aaff; letter-spacing: 2px; }
+    .sm-wrapper { position: relative; width: 100%; overflow: hidden; }
+
+    .hero {
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: visible;
+    }
+    .hero-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 80px;
+      width: 100%;
+      max-width: 1400px;
+      padding: 0 60px;
+      box-sizing: border-box;
+    }
+    .hero-left {
+      flex: 0 0 auto;
+      max-width: 300px;
+      text-align: center;
+    }
+    .hero-tagline {
+      margin: 0;
+      text-align: center;
+    }
+    .hero-tagline strong {
+      display: block;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      letter-spacing: -1px;
+    }
+    .hero-tagline em {
+      font-style: normal;
+      opacity: 0.2;
+      font-size: 0.7rem;
+      display: block;
+      margin-top: 20px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .card-swap-wrapper {
+      position: relative;
+      width: 700px;
+      height: 500px;
+      flex-shrink: 0;
+      perspective: 900px;
+      overflow: visible;
+    }
+    .cs-outer-window {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(4px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .cs-outer-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px 14px 0 0;
+      flex-shrink: 0;
+    }
+    .cs-outer-bar .cs-card-url {
+      background: rgba(255,255,255,0.06);
+      color: #555;
+    }
+    .cs-outer-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #00aaff;
+      text-shadow: 0 0 10px rgba(0,170,255,0.4);
+      letter-spacing: 0.3px;
+    }
+    .cs-outer-url-bar {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      padding: 4px 12px;
+      margin: 0 12px;
+    }
+    .cs-outer-url-icon {
+      font-size: 11px;
+      opacity: 0.5;
+    }
+    .cs-outer-body {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      perspective: 900px;
+    }
+
+    /* ── CARD SWAP ── */
+    .cs-card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 500px;
+      height: 300px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: #111;
+      transform-style: preserve-3d;
+      will-change: transform;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    /* barra do navegador */
+    .cs-card-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      background: #1e1e1e;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .cs-card-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .cs-card-dot:nth-child(1) { background: #ff5f57; }
+    .cs-card-dot:nth-child(2) { background: #febc2e; }
+    .cs-card-dot:nth-child(3) { background: #28c840; }
+    .cs-card-url {
+      flex: 1;
+      margin-left: 10px;
+      background: #2a2a2a;
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 11px;
+      color: #666;
+      letter-spacing: 0.5px;
+    }
+    /* conteúdo do card */
+    .cs-card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      padding: 32px;
+      text-align: center;
+    }
+    .cs-card-body h3 { margin: 0; font-size: 1.4rem; color: #fff; font-weight: 600; }
+    .cs-card-body p  { margin: 0; font-size: 1rem; color: #888; line-height: 1.6; max-width: 480px; }
+
+    .btn {
+      margin-top: 30px;
+      padding: 12px 30px;
+      border: none;
+      background: #00aaff;
+      color: #fff;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover { background: #0088cc; }
+
+    section { padding: 80px 40px; max-width: 1100px; margin: auto; }
+    .about, .services { text-align: center; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+    .card { background: #111; padding: 30px; border-radius: 15px; transition: 0.3s; }
+    .card:hover { transform: translateY(-10px); background: #151515; }
+
+    footer { text-align: center; padding: 30px; color: #666; border-top: 1px solid #111; }
+
+    /* ── TILTED CARDS ── */
+    .tilted-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      padding: 60px 40px;
+      flex-wrap: wrap;
+    }
+    .tilted-card-figure {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      perspective: 800px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer;
+      gap: 12px;
+    }
+    .tilted-card-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .tilted-card-inner {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease, scale 0.3s ease;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    .tilted-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 15px;
+      display: block;
+    }
+    .tilted-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 2;
+      transition: background 0.35s ease;
+    }
+    .tilted-card-overlay p {
+      margin: 0;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: -0.3px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .tilted-card-figure:hover .tilted-card-overlay {
+      background: rgba(0,0,0,0.65);
+    }
+    .tilted-card-figure:hover .tilted-card-overlay p {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .tilted-card-caption {
+      pointer-events: none;
+      position: fixed;
+      background: #fff;
+      color: #2d2d2d;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      opacity: 0;
+      z-index: 999;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    /* ── STAGGERED MENU ── */
+    .sm-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 40px;
+    }
+    .sm-content h2 { font-size: 2.5rem; margin-bottom: 16px; }
+    .sm-content p  { color: #aaa; margin-bottom: 32px; }
+    .sm-prelayers {
+      position: fixed;
+      top: 0; right: 0;
+      width: clamp(280px, 42vw, 480px);
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .sm-prelayer {
+      position: absolute;
+      top: 0; right: 0;
+      width: 100%; height: 100%;
+    }
+    .sm-panel {
+      position: fixed;
+      top: 0; right: 0;
+      width: clamp(280px, 42vw, 480px);
+      height: 100vh;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 80px 40px 40px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      z-index: 1000;
+      pointer-events: auto;
+    }
+    .sm-panel-inner { flex: 1; display: flex; flex-direction: column; gap: 1rem; }
+    .sm-panel-list  { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+    .sm-panel-itemWrap { overflow: hidden; line-height: 1; }
+    .sm-panel-item {
+      display: inline-block;
+      color: #000;
+      font-weight: 700;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: -2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .sm-panel-item:hover { color: #0066cc; }
+    .sm-panel-itemLabel { display: inline-block; will-change: transform; transform-origin: 50% 100%; }
+    .sm-socials { margin-top: auto; padding-top: 2rem; }
+    .sm-socials-title { margin: 0 0 12px; font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #0066cc; }
+    .sm-socials-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+    .sm-socials-link { color: #111; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s; display: flex; align-items: center; gap: 8px; }
+    .sm-socials-link:hover { color: #0066cc; }
+    .sm-socials-tag {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #0066cc;
+      border: 1px solid #0066cc;
+      border-radius: 4px;
+      padding: 1px 6px;
+      opacity: 0.7;
+    }
+    .header-tagline {
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+    }
+    .sm-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #00aaff, #3B82F6);
+      border: none;
+      color: #fff;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 30px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 18px rgba(0,170,255,0.45);
+      animation: btnPulse 2.2s ease-in-out infinite;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .sm-toggle-btn:hover {
+      transform: scale(1.07);
+      box-shadow: 0 0 32px rgba(0,170,255,0.7);
+      animation: none;
+    }
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 0 18px rgba(0,170,255,0.45); transform: scale(1); }
+      50%       { box-shadow: 0 0 32px rgba(59,130,246,0.7); transform: scale(1.04); }
+    }
+    .sm-toggle-text-wrap { overflow: hidden; height: 1em; display: inline-block; white-space: nowrap; }
+    .sm-toggle-text-inner { display: flex; flex-direction: column; line-height: 1; }
+    .sm-toggle-text-inner span { display: block; height: 1em; }
+    .sm-icon { position: relative; width: 14px; height: 14px; display: inline-flex; align-items: center; justify-content: center; }
+    .sm-icon-h, .sm-icon-v {
+      position: absolute;
+      width: 100%; height: 2px;
+      background: currentColor;
+      border-radius: 2px;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .sm-icon-v { transform: translate(-50%, -50%) rotate(90deg); }
+
+    .glow { display: none; }
+
+    /* ── PLASMA BACKGROUND ── */
+    #plasma-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #plasma-bg canvas {
+      width: 100% !important;
+      height: 100% !important;
+      image-rendering: pixelated;
+    }
+
+    .celular-float {
+      animation: celularFloat 3.5s ease-in-out infinite;
+    }
+    @keyframes celularFloat {
+      0%   { transform: scaleX(-1) translateY(0px); }
+      50%  { transform: scaleX(-1) translateY(-18px); }
+      100% { transform: scaleX(-1) translateY(0px); }
+    }
+    /* ── SCROLL PROGRESS BAR ── */
+    #scroll-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, #00aaff, #3B82F6);
+      z-index: 9999;
+      transition: width 0.1s linear;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── SOBRE ── */
+    #sobre {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 40px;
+      display: flex;
+      align-items: center;
+      gap: 80px;
+      flex-wrap: wrap;
+    }
+    .sobre-text { flex: 1; min-width: 260px; }
+    .sobre-text h2 { font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 700; letter-spacing: -1px; margin: 0 0 20px; }
+    .sobre-text p  { color: #aaa; font-size: 1.05rem; line-height: 1.8; margin: 0; }
+    .sobre-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      flex: 0 0 auto;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-size: clamp(2.5rem, 5vw, 3.8rem);
+      font-weight: 800;
+      color: #00aaff;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.8rem; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+
+    /* ── DEPOIMENTOS ── */
+    #depoimentos {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      text-align: center;
+    }
+    #depoimentos h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; margin: 0 0 48px; }
+    .dep-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .dep-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: left;
+      transition: border-color 0.3s;
+    }
+    .dep-card:hover { border-color: rgba(0,170,255,0.3); }
+    .dep-stars { color: #00aaff; font-size: 1rem; margin-bottom: 16px; letter-spacing: 2px; }
+    .dep-text { color: #ccc; font-size: 0.95rem; line-height: 1.7; margin: 0 0 20px; font-style: italic; }
+    .dep-author { display: flex; align-items: center; gap: 12px; }
+    .dep-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, #00aaff, #3B82F6);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; color: #fff; flex-shrink: 0;
+    }
+    .dep-name { font-weight: 600; font-size: 0.9rem; }
+    .dep-role { font-size: 0.78rem; color: #666; }
+
+    /* ── PREÇOS ── */
+    #precos {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      text-align: center;
+    }
+    #precos h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; margin: 0 0 12px; }
+    #precos > p { color: #aaa; margin: 0 0 48px; }
+    .preco-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+    .preco-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-align: center;
+      position: relative;
+      transition: transform 0.3s, border-color 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .preco-lista { list-style: none; margin: 0 0 28px; padding: 0; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .preco-lista li { font-size: 0.9rem; color: #ccc; display: flex; align-items: center; gap: 8px; text-align: left; }
+    .preco-lista li::before { content: '✓'; color: #00aaff; font-weight: 700; flex-shrink: 0; }
+    .preco-card:hover { transform: translateY(-6px); }
+    .preco-card.destaque { border-color: #00aaff; background: rgba(0,170,255,0.06); }
+    .preco-badge {
+      position: absolute;
+      top: -12px; left: 50%;
+      transform: translateX(-50%);
+      background: #00aaff;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+    }
+    .preco-nome { font-size: 0.8rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #00aaff; margin: 0 0 12px; }
+    .preco-valor { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -1px; margin: 0 0 4px; }
+    .preco-valor span { font-size: 1rem; font-weight: 400; color: #666; }
+    .preco-desc { color: #666; font-size: 0.85rem; margin: 0 0 28px; }
+    .preco-btn {
+      display: block; width: 100%; padding: 12px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent; color: #fff;
+      border-radius: 10px; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; transition: 0.3s; text-align: center; text-decoration: none;
+      box-sizing: border-box;
+    }
+    .preco-card.destaque .preco-btn { background: #00aaff; border-color: #00aaff; }
+    .preco-btn:hover { background: #00aaff; border-color: #00aaff; }
+
+    /* ── CONTATO ── */
+    #contact {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      text-align: center;
+    }
+    #contact h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; margin: 0 0 12px; }
+    #contact > p { color: #aaa; margin: 0 0 40px; }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; text-align: left; }
+    .contact-form input,
+    .contact-form textarea {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 14px 18px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.3s;
+      resize: none;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus { border-color: #00aaff; }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: #555; }
+    .contact-form textarea { height: 130px; }
+    .contact-submit {
+      padding: 14px;
+      background: #00aaff;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .contact-submit:hover { background: #0088cc; transform: translateY(-2px); }
+    .contact-wpp {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 14px 28px;
+      background: #25D366;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .contact-wpp:hover { background: #1ebe5d; transform: translateY(-2px); }
+
+    /* ── WHATSAPP FLUTUANTE ── */
+    #wpp-float {
+      position: fixed;
+      bottom: 32px; right: 32px;
+      width: 56px; height: 56px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9998;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      text-decoration: none;
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: wppPulse 2.5s ease-in-out infinite;
+    }
+    #wpp-float:hover { transform: scale(1.12); box-shadow: 0 6px 28px rgba(37,211,102,0.6); animation: none; }
+    #wpp-float svg { width: 28px; height: 28px; fill: #fff; }
+    @keyframes wppPulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+      50%       { box-shadow: 0 4px 32px rgba(37,211,102,0.7); }
+    }
+
+    /* ── ANIMAÇÕES DEMO ── */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      text-align: left;
+    }
+    .demo-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: border-color .3s, transform .3s;
+    }
+    .demo-card:hover { border-color: rgba(0,170,255,0.35); transform: translateY(-4px); }
+    .demo-card-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #00aaff;
+    }
+    .demo-card-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    .demo-card-desc { font-size: 0.82rem; color: #666; line-height: 1.5; }
+
+    /* typing */
+    .typing-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+      min-height: 1.4em;
+      border-right: 2px solid #00aaff;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: blink .7s step-end infinite;
+    }
+    @keyframes blink { 50% { border-color: transparent; } }
+
+    /* ripple btn */
+    .demo-ripple-btn {
+      padding: 12px 28px;
+      background: linear-gradient(135deg, #00aaff, #3B82F6);
+      border: none;
+      border-radius: 30px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s;
+    }
+    .demo-ripple-btn:hover { transform: scale(1.05); }
+    .ripple-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      transform: scale(0);
+      animation: rippleAnim .5s linear;
+      pointer-events: none;
+    }
+    @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+    /* counters */
+    .demo-counters { display: flex; gap: 24px; justify-content: center; }
+    .demo-counters > div { text-align: center; }
+    .demo-num { font-size: 2rem; font-weight: 800; color: #00aaff; }
+    .demo-num-label { font-size: 0.7rem; color: #666; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+    /* hover box */
+    .demo-hover-box {
+      padding: 16px 28px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      font-size: 0.9rem;
+      color: #aaa;
+      cursor: default;
+      transition: all .35s ease;
+      background: transparent;
+    }
+    .demo-hover-box:hover {
+      background: linear-gradient(135deg, #00aaff22, #9333ea22);
+      border-color: #00aaff;
+      color: #fff;
+      transform: scale(1.06);
+      box-shadow: 0 0 24px rgba(0,170,255,0.2);
+    }
+
+    /* particles */
+    .demo-particles-body { position: relative; }
+    .dp {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--s);
+      height: var(--s);
+      border-radius: 50%;
+      background: #00aaff;
+      opacity: .7;
+      animation: floatDp 3s ease-in-out var(--d) infinite alternate;
+    }
+    @keyframes floatDp {
+      from { transform: translateY(0) scale(1); opacity: .7; }
+      to   { transform: translateY(-14px) scale(1.3); opacity: .3; }
+    }
+
+    /* slide */
+    .demo-slide-body { padding: 0; overflow: hidden; border-radius: 10px; flex-direction: column; gap: 10px; }
+    .demo-slide-track { position: relative; width: 100%; height: 80px; }
+    .demo-slide-item {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+      opacity: 0;
+      transform: translateY(14px) scale(0.97);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+      pointer-events: none;
+      letter-spacing: 0.5px;
+    }
+    .demo-slide-item.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .demo-slide-dots { display: flex; gap: 6px; justify-content: center; margin-top: 4px; }
+    .dsd {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transition: background 0.3s, transform 0.3s;
+    }
+    .dsd.active { background: #00aaff; transform: scale(1.4); }
+
+    @media (max-width: 600px) {
+      .demo-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── COMO FUNCIONA ── */
+    #como-funciona {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      text-align: center;
+    }
+    #como-funciona h2 { font-size: clamp(1.8rem,3vw,2.4rem); font-weight: 700; margin: 0 0 12px; }
+    #como-funciona > p { color: #aaa; margin: 0 0 56px; }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      position: relative;
+    }
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: calc(16.66% + 20px);
+      right: calc(16.66% + 20px);
+      height: 2px;
+      background: linear-gradient(90deg, #00aaff, #3B82F6);
+      z-index: 0;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .step-num {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00aaff, #3B82F6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; font-weight: 800; color: #fff;
+      box-shadow: 0 0 24px rgba(0,170,255,0.4);
+      flex-shrink: 0;
+    }
+    .step-title { font-size: 1rem; font-weight: 700; color: #fff; }
+    .step-desc  { font-size: 0.85rem; color: #666; line-height: 1.6; }
+
+    /* ── DIFERENCIAIS ── */
+    #diferenciais {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      text-align: center;
+    }
+    #diferenciais h2 { font-size: clamp(1.8rem,3vw,2.4rem); font-weight: 700; margin: 0 0 48px; }
+    .dif-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .dif-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 32px 24px;
+      transition: border-color .3s, transform .3s;
+    }
+    .dif-card:hover { border-color: rgba(0,170,255,0.35); transform: translateY(-5px); }
+    .dif-icon { font-size: 2rem; margin-bottom: 14px; }
+    .dif-title { font-size: 1rem; font-weight: 700; color: #fff; margin: 0 0 8px; }
+    .dif-desc  { font-size: 0.85rem; color: #666; line-height: 1.6; margin: 0; }
+
+    /* ── FAQ ── */
+    #faq {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+    #faq h2 { font-size: clamp(1.8rem,3vw,2.4rem); font-weight: 700; margin: 0 0 12px; text-align: center; }
+    #faq > p { color: #aaa; text-align: center; margin: 0 0 48px; }
+    .faq-item {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: left;
+      padding: 20px 0;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-family: inherit;
+      transition: color .2s;
+    }
+    .faq-q:hover { color: #00aaff; }
+    .faq-arrow {
+      font-size: 1.2rem;
+      transition: transform .35s ease;
+      flex-shrink: 0;
+      color: #00aaff;
+    }
+    .faq-item.open .faq-arrow { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .4s ease, padding .3s ease;
+      color: #aaa;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      padding: 0;
+    }
+    .faq-item.open .faq-a { max-height: 200px; padding-bottom: 20px; }
+
+    /* ── BADGE NOVOS PROJETOS ── */
+    #badge-projetos {
+      display: flex;
+      justify-content: center;
+      padding: 32px 40px 0;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0,170,255,0.1);
+      border: 1px solid rgba(0,170,255,0.3);
+      border-radius: 30px;
+      padding: 10px 22px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #00aaff;
+      animation: badgePulse 2.5s ease-in-out infinite;
+    }
+    .badge-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #00aaff;
+      animation: dotBlink 1.2s ease-in-out infinite;
+    }
+    @keyframes badgePulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(0,170,255,0); }
+      50%      { box-shadow: 0 0 16px 2px rgba(0,170,255,0.2); }
+    }
+    @keyframes dotBlink {
+      0%,100% { opacity: 1; } 50% { opacity: 0.2; }
+    }
+
+    /* stagger nos cards de serviço */
+    .card.reveal { transition-delay: var(--d, 0s); }
+
+    /* ── CURSOR PERSONALIZADO REMOVIDO ── */
+
+    /* ── PORTFÓLIO ── */
+    #portfolio {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      text-align: center;
+    }
+    #portfolio h2 { font-size: clamp(1.8rem,3vw,2.4rem); font-weight: 700; margin: 0 0 12px; }
+    #portfolio > p { color: #aaa; margin: 0 0 48px; }
+    .port-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .port-card {
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 16/10;
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .port-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.5); }
+    .port-card-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .5s ease;
+    }
+    .port-card:hover .port-card-img { transform: scale(1.06); }
+    .port-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity .35s ease;
+    }
+    .port-card:hover .port-card-overlay { opacity: 1; }
+    .port-card-title { font-size: 1rem; font-weight: 700; color: #fff; margin: 0 0 4px; }
+    .port-card-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #00aaff;
+      background: rgba(0,170,255,0.15);
+      border-radius: 4px;
+      padding: 2px 8px;
+    }
+    .port-note {
+      margin-top: 32px;
+      padding: 16px 24px;
+      background: rgba(0,170,255,0.06);
+      border: 1px solid rgba(0,170,255,0.15);
+      border-radius: 12px;
+      color: #aaa;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+    .port-note span { color: #00aaff; font-weight: 600; }
+
+    /* ── TECNOLOGIAS ── */
+    #tecnologias {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      text-align: center;
+    }
+    #tecnologias h2 { font-size: clamp(1.8rem,3vw,2.4rem); font-weight: 700; margin: 0 0 12px; }
+    #tecnologias > p { color: #aaa; margin: 0 0 48px; }
+    .tech-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+    }
+    .tech-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 30px;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #ccc;
+      transition: border-color .3s, color .3s, transform .2s;
+    }
+    .tech-pill:hover { border-color: rgba(0,170,255,0.4); color: #fff; transform: translateY(-3px); }
+    .tech-pill span { font-size: 1.2rem; }
+
+    /* ── RODAPÉ COMPLETO ── */
+    .footer-full {
+      background: rgba(0,0,0,0.6);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 60px 40px 32px;
+      margin-top: 0;
+    }
+    .footer-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .footer-brand p { color: #555; font-size: 0.88rem; line-height: 1.7; margin: 12px 0 20px; max-width: 280px; }
+    .footer-brand-socials { display: flex; gap: 12px; }
+    .footer-social-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: #aaa; text-decoration: none; font-size: 0.8rem; font-weight: 700;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .footer-social-btn:hover { background: rgba(0,170,255,0.15); border-color: #00aaff; color: #00aaff; }
+    .footer-col h4 { font-size: 0.72rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #00aaff; margin: 0 0 16px; }
+    .footer-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul li a { color: #555; text-decoration: none; font-size: 0.88rem; transition: color .2s; }
+    .footer-col ul li a:hover { color: #fff; }
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 24px auto 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.78rem;
+      color: #333;
+    }
+    .footer-bottom a { color: #444; text-decoration: none; transition: color .2s; }
+    .footer-bottom a:hover { color: #00aaff; }
+
+    /* ── COOKIES ── */
+    #cookie-bar {
+      position: fixed;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: rgba(15,15,15,0.95);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      z-index: 9997;
+      max-width: 560px;
+      width: calc(100% - 48px);
+      backdrop-filter: blur(12px);
+      transition: transform .5s cubic-bezier(.34,1.56,.64,1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    #cookie-bar.show { transform: translateX(-50%) translateY(0); }
+    #cookie-bar p { margin: 0; font-size: 0.82rem; color: #aaa; line-height: 1.5; flex: 1; }
+    #cookie-bar p a { color: #00aaff; text-decoration: none; }
+    .cookie-btn {
+      padding: 8px 18px;
+      background: #00aaff;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: none;
+      white-space: nowrap;
+      transition: background .2s;
+    }
+    .cookie-btn:hover { background: #0088cc; }
+
+    @media (max-width: 700px) {
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      #cookie-bar { flex-direction: column; text-align: center; }
+      #cursor, #cursor-ring { display: none; }
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVIDADE — MOBILE/TABLET
+    ══════════════════════════════ */
+
+    /* Tablet (≤ 900px) */
+    @media (max-width: 900px) {
+      .hero-content {
+        flex-direction: column;
+        gap: 40px;
+        padding: 0 24px;
+      }
+      .hero-left { max-width: 100%; }
+      .card-swap-wrapper {
+        width: 100%;
+        max-width: 500px;
+        height: 380px;
+      }
+      .cs-card { width: 85%; max-width: 380px; }
+      #sobre {
+        flex-direction: column;
+        gap: 40px;
+        padding: 60px 24px;
+      }
+      .sobre-stats { flex-direction: row; justify-content: center; gap: 40px; }
+      #instagram-section { flex-direction: column; padding: 60px 24px; gap: 32px; }
+      #instagram-section img { width: 60vw !important; max-width: 320px; }
+      .tilted-row { gap: 24px; padding: 40px 24px; }
+      .preco-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+      section { padding: 60px 24px; }
+    }
+
+    /* Mobile (≤ 600px) */
+    @media (max-width: 600px) {
+      header { padding: 16px 20px; }
+      .header-tagline { display: none; }
+
+      .hero { height: auto; padding: 60px 0 40px; }
+      .hero-content { padding: 0 20px; gap: 32px; }
+      .card-swap-wrapper { height: 320px; max-width: 100%; }
+      .cs-card { width: 90%; height: 240px; }
+      .cs-card-body h3 { font-size: 1.1rem; }
+      .cs-card-body p  { font-size: 0.85rem; }
+
+      .tilted-card-figure,
+      .tilted-card-inner { width: 240px; height: 240px; }
+      .tilted-row { gap: 20px; padding: 32px 16px; }
+
+      #sobre { padding: 48px 20px; }
+      .sobre-stats { flex-direction: column; align-items: center; gap: 24px; }
+
+      #instagram-section { padding: 48px 20px; gap: 24px; }
+      #instagram-section img { width: 80vw !important; }
+
+      #depoimentos,
+      #precos,
+      #contact { padding: 48px 20px; }
+
+      .dep-grid { grid-template-columns: 1fr; }
+
+      .sm-prelayers,
+      .sm-panel { width: 100%; }
+
+      .contact-wpp { padding: 12px 16px; font-size: 0.9rem; }
+
+      footer { padding: 24px 20px; font-size: 0.85rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-bar"></div>
+
+<!-- WHATSAPP FLUTUANTE REMOVIDO -->
+
+<!-- INTRO -->
+<div id="intro">
+  <div id="intro-text">
+    <div id="lightning"></div>
+  </div>
+</div>
+
+<!-- PLASMA BACKGROUND -->
+<div id="plasma-bg"><canvas id="plasma-canvas"></canvas></div>
+
+<!-- SITE -->
+<div id="site">
+
+
+  <div id="header-wrap">
+    <div id="staggered-menu-root" class="sm-wrapper" data-position="right">
+      <div class="sm-prelayers" aria-hidden="true">
+        <div class="sm-prelayer" style="background:#001a3a"></div>
+        <div class="sm-prelayer" style="background:#0066cc"></div>
+      </div>
+      <aside class="sm-panel" id="sm-panel" aria-hidden="true">
+        <div class="sm-panel-inner">
+          <ul class="sm-panel-list" id="sm-list">
+            <li class="sm-panel-itemWrap"><a class="sm-panel-item" href="#"><span class="sm-panel-itemLabel">Sobre</span></a></li>
+            <li class="sm-panel-itemWrap"><a class="sm-panel-item" href="#services"><span class="sm-panel-itemLabel">Serviços</span></a></li>
+            <li class="sm-panel-itemWrap"><a class="sm-panel-item" href="#contact"><span class="sm-panel-itemLabel">Contato</span></a></li>
+            <li class="sm-panel-itemWrap"><a class="sm-panel-item" href="https://wa.me/5511969033592?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20GEM%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento!" target="_blank"><span class="sm-panel-itemLabel">WhatsApp</span></a></li>
+          </ul>
+          <div class="sm-socials">
+            <h3 class="sm-socials-title">Redes Sociais</h3>
+            <ul class="sm-socials-list">
+              <li><a href="https://www.instagram.com/isgemcorp/" target="_blank" rel="noopener noreferrer" class="sm-socials-link">Instagram</a></li>
+              <li>
+                <a href="https://www.linkedin.com/in/erik-costa-anjos-824772400" target="_blank" class="sm-socials-link">
+                  LinkedIn ↗ Erik
+                  <span class="sm-socials-tag">Co-fundador</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/maxwell-rosa-8655903b5" target="_blank" class="sm-socials-link">
+                  LinkedIn ↗ Maxwell
+                  <span class="sm-socials-tag">CEO</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+      <header>
+        <h1><img src="GEM FOTO.png" alt="GEM" style="height: 40px; border-radius: 8px; vertical-align: middle;"></h1>
+        <span class="header-tagline">Veja exemplos abaixo: <span style="color:#00aaff;">Deixamos seu site a sua cara!</span></span>
+        <button class="sm-toggle-btn" id="sm-toggle" aria-expanded="false" aria-controls="sm-panel">
+          <span class="sm-toggle-text-wrap"><span class="sm-toggle-text-inner" id="sm-toggle-text"><span>Clique Aqui</span><span>Fechar</span></span></span>
+          <span class="sm-icon" id="sm-icon"><span class="sm-icon-h"></span><span class="sm-icon-v"></span></span>
+        </button>
+      </header>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-left">
+        <p class="hero-tagline">
+          <strong>Design sem propósito<br>é só enfeite!</strong>
+          <em>— GEM</em>
+        </p>
+      </div>
+      <div class="card-swap-wrapper" id="cardSwap">
+        <div class="cs-outer-window">
+          <div class="cs-outer-bar">
+            <span class="cs-card-dot"></span><span class="cs-card-dot"></span><span class="cs-card-dot"></span>
+            <span class="cs-outer-url-bar">
+              <span class="cs-outer-url-icon">🔒</span>
+              <span class="cs-outer-title">Animações diversificadas para seu site.</span>
+            </span>
+          </div>
+          <div class="cs-outer-body">
+      <div class="cs-card" data-card>
+        <div class="cs-card-bar">
+          <span class="cs-card-dot"></span><span class="cs-card-dot"></span><span class="cs-card-dot"></span>
+          <span class="cs-card-url">gem.com.br/sites</span>
+        </div>
+        <div class="cs-card-body">
+          <h3>Transforme ideias em presença digital</h3>
+          <p>Criamos soluções sob medida para levar o seu negócio para o mundo online.</p>
+        </div>
+      </div>
+      <div class="cs-card" data-card>
+        <div class="cs-card-bar">
+          <span class="cs-card-dot"></span><span class="cs-card-dot"></span><span class="cs-card-dot"></span>
+          <span class="cs-card-url">gem.com.br/online</span>
+        </div>
+        <div class="cs-card-body">
+          <h3>Do zero ao Online</h3>
+          <p>A gente constrói seu espaço na internet, do planejamento ao lançamento.</p>
+        </div>
+      </div>
+      <div class="cs-card" data-card>
+        <div class="cs-card-bar">
+          <span class="cs-card-dot"></span><span class="cs-card-dot"></span><span class="cs-card-dot"></span>
+          <span class="cs-card-url">gem.com.br/resultados</span>
+        </div>
+        <div class="cs-card-body">
+          <h3>Seu site trabalhando por você 24h</h3>
+          <p>Presença digital ativa o tempo todo, gerando resultados enquanto você descansa.</p>
+        </div>
+      </div>
+          </div><!-- cs-outer-body -->
+        </div><!-- cs-outer-window -->
+    </div>
+  </section>
+
+
+
+  <div style="width: 80%; max-width: 900px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.1);"></div>
+
+  <p style="text-align:center; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; letter-spacing: -0.5px; margin: 48px 0 0; color: #fff;">Seu site <span style="color:#00aaff;">do seu jeito.</span> Do zero ao online, <span style="color:#00aaff;">do seu gosto.</span></p>
+
+  <div class="tilted-row">
+    <figure class="tilted-card-figure" data-caption="Site Institucional">
+      <div class="tilted-card-inner">
+        <img class="tilted-card-img" src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&q=80" alt="Site Institucional">
+        <div class="tilted-card-overlay"><p>Saia do básico.</p></div>
+      </div>
+      <span class="tilted-card-label">Site Institucional</span>
+      <div class="tilted-card-caption"></div>
+    </figure>
+    <figure class="tilted-card-figure" data-caption="E-commerce">
+      <div class="tilted-card-inner">
+        <img class="tilted-card-img" src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" alt="E-commerce">
+        <div class="tilted-card-overlay"><p>Pare de perder clientes.</p></div>
+      </div>
+      <span class="tilted-card-label">E-commerce</span>
+      <div class="tilted-card-caption"></div>
+    </figure>
+    <figure class="tilted-card-figure" data-caption="Sistema ERP">
+      <div class="tilted-card-inner">
+        <img class="tilted-card-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80" alt="Sistema ERP">
+        <div class="tilted-card-overlay"><p>Chegou a hora de evoluir.</p></div>
+      </div>
+      <span class="tilted-card-label">Sistema ERP</span>
+      <div class="tilted-card-caption"></div>
+    </figure>
+  </div>
+
+  <div style="width: 80%; max-width: 900px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.1);"></div>
+
+  <!-- SEÇÃO ANIMAÇÕES DEMO -->
+  <section id="animacoes" style="max-width:1100px;margin:0 auto;padding:80px 40px;text-align:center;">
+    <p class="reveal" style="font-size:0.8rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#00aaff;margin:0 0 12px;">Personalização total</p>
+    <h2 class="reveal" style="font-size:clamp(1.8rem,3vw,2.6rem);font-weight:700;letter-spacing:-1px;margin:0 0 16px;">Seu site com a sua <span style="color:#00aaff;">identidade.</span></h2>
+    <p class="reveal" style="color:#aaa;font-size:1.05rem;max-width:600px;margin:0 auto 56px;line-height:1.7;">Cada detalhe é pensado junto com você — cores, fontes, animações e estilo. Veja alguns exemplos do que podemos criar:</p>
+
+    <div class="demo-grid reveal">
+
+      <!-- CARD 1: Efeito de digitação -->
+      <div class="demo-card" id="demo-typing">
+        <div class="demo-card-label">Texto animado</div>
+        <div class="demo-card-body">
+          <p class="typing-text" id="typingEl"></p>
+        </div>
+        <div class="demo-card-desc">Títulos que se escrevem sozinhos, chamando atenção do visitante.</div>
+      </div>
+
+      <!-- CARD 2: Botão com efeito ripple -->
+      <div class="demo-card" id="demo-btn">
+        <div class="demo-card-label">Botões interativos</div>
+        <div class="demo-card-body">
+          <button class="demo-ripple-btn" onclick="ripple(event, this)">Clique aqui ✦</button>
+        </div>
+        <div class="demo-card-desc">Botões com feedback visual que incentivam o clique.</div>
+      </div>
+
+      <!-- CARD 3: Contador animado -->
+      <div class="demo-card" id="demo-counter">
+        <div class="demo-card-label">Números em destaque</div>
+        <div class="demo-card-body demo-counters">
+          <div><span class="demo-num" data-max="99">0</span><small>%</small><div class="demo-num-label">Satisfação</div></div>
+          <div><span class="demo-num" data-max="24">0</span><small>h</small><div class="demo-num-label">Online</div></div>
+          <div><span class="demo-num" data-max="360">0</span><small>°</small><div class="demo-num-label">Dedicação</div></div>
+        </div>
+        <div class="demo-card-desc">Métricas que impressionam e geram confiança.</div>
+      </div>
+
+      <!-- CARD 4: Hover com gradiente -->
+      <div class="demo-card" id="demo-hover">
+        <div class="demo-card-label">Efeitos de hover</div>
+        <div class="demo-card-body">
+          <div class="demo-hover-box">Passe o mouse aqui</div>
+        </div>
+        <div class="demo-card-desc">Elementos que reagem ao toque do usuário.</div>
+      </div>
+
+      <!-- CARD 5: Partículas flutuantes -->
+      <div class="demo-card" id="demo-particles">
+        <div class="demo-card-label">Partículas decorativas</div>
+        <div class="demo-card-body demo-particles-body">
+          <span class="dp" style="--x:20%;--y:60%;--s:6px;--d:0s"></span>
+          <span class="dp" style="--x:50%;--y:30%;--s:10px;--d:.4s"></span>
+          <span class="dp" style="--x:75%;--y:65%;--s:7px;--d:.8s"></span>
+          <span class="dp" style="--x:35%;--y:75%;--s:5px;--d:1.2s"></span>
+          <span class="dp" style="--x:65%;--y:20%;--s:9px;--d:.2s"></span>
+          <span class="dp" style="--x:85%;--y:45%;--s:6px;--d:.6s"></span>
+          <span class="dp" style="--x:15%;--y:35%;--s:8px;--d:1s"></span>
+          <p style="position:relative;z-index:1;color:#fff;font-size:1rem;font-weight:600;margin:0;">Fundo vivo</p>
+        </div>
+        <div class="demo-card-desc">Fundos animados que dão vida à página.</div>
+      </div>
+
+      <!-- CARD 6: Slide de imagem -->
+      <div class="demo-card" id="demo-slide">
+        <div class="demo-card-label">Transições suaves</div>
+        <div class="demo-card-body demo-slide-body">
+          <div class="demo-slide-track" id="demoSlide">
+            <div class="demo-slide-item active" style="--c1:#00aaff22;--c2:#3B82F622;">🎨 Design</div>
+            <div class="demo-slide-item" style="--c1:#9333ea22;--c2:#00aaff22;">⚡ Performance</div>
+            <div class="demo-slide-item" style="--c1:#00ffd122;--c2:#3B82F622;">📱 Mobile</div>
+            <div class="demo-slide-item" style="--c1:#ff5c7a22;--c2:#9333ea22;">🚀 Resultados</div>
+          </div>
+          <div class="demo-slide-dots" id="demoSlideDots">
+            <span class="dsd active"></span>
+            <span class="dsd"></span>
+            <span class="dsd"></span>
+            <span class="dsd"></span>
+          </div>
+        </div>
+        <div class="demo-card-desc">Carrosséis e sliders para destacar seu conteúdo.</div>
+      </div>
+
+    </div>
+
+    <p class="reveal" style="margin-top:48px;font-size:1.1rem;color:#fff;font-weight:600;">Tudo isso — e muito mais — <span style="color:#00aaff;">feito do seu jeito.</span></p>
+    <a href="#contact" class="reveal" style="display:inline-block;margin-top:20px;padding:14px 36px;background:#00aaff;color:#fff;border-radius:30px;font-weight:700;font-size:1rem;text-decoration:none;transition:background .3s;" onmouseover="this.style.background='#0088cc'" onmouseout="this.style.background='#00aaff'">Quero meu site assim</a>
+  </section>
+
+  <div style="width: 80%; max-width: 900px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.1);"></div>
+
+  <!-- SEÇÃO INSTAGRAM -->
+  <section id="instagram-section" style="max-width: 1100px; margin: 0 auto; padding: 80px 40px; display: flex; align-items: center; gap: 60px; flex-wrap: wrap;">
+    <div style="flex: 0 0 auto; display: flex; justify-content: center;">
+      <img src="celular-removebg-preview.png" alt="Instagram no celular" class="celular-float" style="width: clamp(320px, 45vw, 560px); transform: scaleX(-1); filter: drop-shadow(0 0 40px rgba(0,170,255,0.35));">
+    </div>
+    <div style="flex: 1; min-width: 260px;">
+      <p style="font-size: 0.85rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #00aaff; margin: 0 0 16px;">Instagram</p>
+      <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; letter-spacing: -1px; line-height: 1.2; margin: 0 0 20px; color: #fff;">Desenvolvemos o Instagram da sua empresa com o <span style="color:#00aaff;">padrão profissional.</span></h2>
+      <p style="color: #aaa; font-size: 1.05rem; line-height: 1.7; margin: 0;">Feed planejado, identidade visual consistente e conteúdo que converte. Sua marca merece um perfil que impressiona desde o primeiro scroll.</p>
+    </div>
+  </section>
+
+  <div style="width: 80%; max-width: 900px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.1);"></div>
+
+  <section id="services" class="services">
+    <h2 class="reveal">Nossos Serviços</h2>
+    <div class="services-grid">
+      <div class="card reveal" style="--d:0s"><h3>Desenvolvimento de Sites</h3><p>Sites modernos, rápidos e personalizados para sua empresa.</p></div>
+      <div class="card reveal" style="--d:.15s"><h3>Aplicativos</h3><p>Aplicativos sob medida para melhorar a experiência dos seus clientes.</p></div>
+      <div class="card reveal" style="--d:.3s"><h3>Sistemas ERP</h3><p>Soluções inteligentes para gestão e crescimento do seu negócio.</p></div>
+    </div>
+  </section>
+
+  <div style="width:80%;max-width:900px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);"></div>
+
+  <!-- BADGE NOVOS PROJETOS -->
+  <div id="badge-projetos">
+    <div class="badge-pill reveal">
+      <span class="badge-dot"></span>
+      Aceitando novos projetos — fale com a gente!
+    </div>
+  </div>
+
+  <div style="width:80%;max-width:900px;margin:40px auto 0;border-top:1px solid rgba(255,255,255,0.1);"></div>
+
+  <!-- COMO FUNCIONA -->
+  <section id="como-funciona">
+    <p class="reveal" style="font-size:.8rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#00aaff;margin:0 0 12px;">Simples assim</p>
+    <h2 class="reveal">Como funciona?</h2>
+    <p class="reveal">Do primeiro contato ao site no ar, em 3 passos.</p>
+    <div class="steps-grid">
+      <div class="step-item reveal">
+        <div class="step-num">1</div>
+        <div class="step-title">Fale com a gente</div>
+        <div class="step-desc">Nos conte sobre o seu negócio, o que você precisa e qual é a sua visão. Sem compromisso.</div>
+      </div>
+      <div class="step-item reveal">
+        <div class="step-num">2</div>
+        <div class="step-title">Receba o orçamento</div>
+        <div class="step-desc">Montamos uma proposta personalizada com prazo, escopo e valor — tudo transparente.</div>
+      </div>
+      <div class="step-item reveal">
+        <div class="step-num">3</div>
+        <div class="step-title">Seu site no ar</div>
+        <div class="step-desc">Desenvolvemos, testamos e entregamos. Você acompanha cada etapa do processo.</div>
+      </div>
+    </div>
+  </section>
+
+  <div style="width:80%;max-width:900px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);"></div>
+
+  <!-- DIFERENCIAIS -->
+  <section id="diferenciais">
+    <h2 class="reveal">Por que escolher a GEM?</h2>
+    <div class="dif-grid">
+      <div class="dif-card reveal">
+        <div class="dif-icon">⚡</div>
+        <p class="dif-title">Entrega rápida</p>
+        <p class="dif-desc">Projetos entregues com agilidade, sem abrir mão da qualidade.</p>
+      </div>
+      <div class="dif-card reveal">
+        <div class="dif-icon">🎨</div>
+        <p class="dif-title">Design exclusivo</p>
+        <p class="dif-desc">Nada de templates prontos. Cada projeto é criado do zero para a sua marca.</p>
+      </div>
+      <div class="dif-card reveal">
+        <div class="dif-icon">📱</div>
+        <p class="dif-title">100% responsivo</p>
+        <p class="dif-desc">Seu site perfeito em qualquer tela — celular, tablet ou desktop.</p>
+      </div>
+      <div class="dif-card reveal">
+        <div class="dif-icon">🤝</div>
+        <p class="dif-title">Suporte pós-entrega</p>
+        <p class="dif-desc">Não sumimos depois de entregar. Estamos aqui para ajudar quando precisar.</p>
+      </div>
+    </div>
+  </section>
+
+  <div style="width:80%;max-width:900px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);"></div>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2 class="reveal">Perguntas frequentes</h2>
+    <p class="reveal">Tire suas dúvidas antes de falar com a gente.</p>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Quanto tempo leva para ficar pronto? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">Depende do projeto. Um site institucional pode ficar pronto em poucos dias. Projetos maiores como e-commerce ou ERP têm prazos definidos na proposta, sempre combinados com você antes de começar.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Preciso ter domínio e hospedagem? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">Não necessariamente. Podemos cuidar de tudo isso por você, ou trabalhar com o que você já tem. Orientamos em cada etapa para que você não precise entender de tecnologia.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Vocês fazem manutenção depois da entrega? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">Sim. Oferecemos suporte pós-entrega e podemos combinar um plano de manutenção mensal conforme a necessidade do seu projeto.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Posso pedir alterações durante o desenvolvimento? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">Com certeza. Trabalhamos de forma colaborativa — você acompanha o processo e pode sugerir ajustes ao longo do desenvolvimento.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">O orçamento é gratuito? <span class="faq-arrow">+</span></button>
+        <div class="faq-a">Sim, totalmente gratuito e sem compromisso. Entre em contato, nos conte o que precisa e enviamos uma proposta personalizada.</div>
+      </div>
+    </div>
+  </section>
+
+  <div style="width:80%;max-width:900px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);"></div>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="sobre-text reveal">
+      <p style="font-size:0.8rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#00aaff;margin:0 0 12px;">Quem somos</p>
+      <h2>Tecnologia que <span style="color:#00aaff;">transforma</span> negócios.</h2>
+      <p>A GEM nasceu com um propósito claro: levar presença digital de qualidade para empresas que querem crescer. Desenvolvemos sites, aplicativos e sistemas ERP com foco em resultado, performance e identidade visual que representa de verdade quem você é.</p>
+    </div>
+  </section>
+
+  <div style="width:80%;max-width:900px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);"></div>
+
+  <!-- PORTFÓLIO -->
+  <section id="portfolio">
+    <p class="reveal" style="font-size:.8rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#00aaff;margin:0 0 12px;">Nosso trabalho</p>
+    <h2 class="reveal">Projetos em destaque</h2>
+    <p class="reveal">Exemplos do que criamos — cada projeto com identidade única.</p>
+    <div class="port-grid">
+      <div class="port-card reveal">
+        <img class="port-card-img" src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80" alt="Site Institucional">
+        <div class="port-card-overlay">
+          <span class="port-card-tag">Site Institucional</span>
+          <p class="port-card-title">Presença digital profissional</p>
+        </div>
+      </div>
+      <div class="port-card reveal">
+        <img class="port-card-img" src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" alt="E-commerce">
+        <div class="port-card-overlay">
+          <span class="port-card-tag">E-commerce</span>
+          <p class="port-card-title">Loja virtual completa</p>
+        </div>
+      </div>
+      <div class="port-card reveal">
+        <img class="port-card-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80" alt="Dashboard ERP">
+        <div class="port-card-overlay">
+          <span class="port-card-tag">Sistema ERP</span>
+          <p class="port-card-title">Gestão inteligente de negócios</p>
+        </div>
+      </div>
+      <div class="port-card reveal">
+        <img class="port-card-img" src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80" alt="App Mobile">
+        <div class="port-card-overlay">
+          <span class="port-card-tag">Aplicativo Mobile</span>
+          <p class="port-card-title">Experiência mobile first</p>
+        </div>
+      </div>
+    </div>
+    <div class="port-note reveal">
+      <span>🚀 A GEM está começando</span> — esses são exemplos do estilo e qualidade que entregamos. Seu projeto pode ser o primeiro case de sucesso da nossa história. <a href="#contact" style="color:#00aaff;font-weight:600;">Fale com a gente.</a>
+    </div>
+  </section>
+
+  <div style="width:80%;max-width:900px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);"></div>
+
+  <!-- TECNOLOGIAS -->
+  <section id="tecnologias">
+    <p class="reveal" style="font-size:.8rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#00aaff;margin:0 0 12px;">Stack</p>
+    <h2 class="reveal">Tecnologias que usamos</h2>
+    <p class="reveal">Ferramentas modernas para entregar o melhor resultado.</p>
+    <div class="tech-grid reveal">
+      <div class="tech-pill"><span>⚛️</span> React</div>
+      <div class="tech-pill"><span>🟩</span> Node.js</div>
+      <div class="tech-pill"><span>🐘</span> PostgreSQL</div>
+      <div class="tech-pill"><span>🎨</span> Figma</div>
+      <div class="tech-pill"><span>📱</span> React Native</div>
+      <div class="tech-pill"><span>🔷</span> TypeScript</div>
+      <div class="tech-pill"><span>☁️</span> AWS / Cloud</div>
+      <div class="tech-pill"><span>🐳</span> Docker</div>
+      <div class="tech-pill"><span>🔥</span> Firebase</div>
+      <div class="tech-pill"><span>🌐</span> Next.js</div>
+      <div class="tech-pill"><span>💅</span> Tailwind CSS</div>
+      <div class="tech-pill"><span>🔗</span> REST API</div>
+    </div>
+  </section>
+
+  <div style="width:80%;max-width:900px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);"></div>
+
+  <!-- ORÇAMENTO -->
+  <section id="precos">
+    <h2 class="reveal">Quanto vai custar?</h2>
+    <p class="reveal">Cada projeto é único. O valor é definido junto com você, de acordo com o que o seu negócio realmente precisa.</p>
+    <div class="preco-grid">
+      <div class="preco-card reveal">
+        <p class="preco-nome">Site Institucional</p>
+        <p class="preco-valor" style="font-size:1.3rem;font-weight:600;color:#aaa;">Orçamento personalizado</p>
+        <p class="preco-desc">Para empresas que querem marcar presença online</p>
+        <ul class="preco-lista">
+          <li>Design exclusivo</li>
+          <li>Responsivo para mobile</li>
+          <li>Formulário de contato</li>
+          <li>Otimizado para Google</li>
+        </ul>
+        <a href="#contact" class="preco-btn">Solicitar orçamento</a>
+      </div>
+      <div class="preco-card destaque reveal">
+        <div class="preco-badge">Mais procurado</div>
+        <p class="preco-nome">Site + E-commerce</p>
+        <p class="preco-valor" style="font-size:1.3rem;font-weight:600;color:#aaa;">Orçamento personalizado</p>
+        <p class="preco-desc">Para quem quer vender online com estrutura profissional</p>
+        <ul class="preco-lista">
+          <li>Tudo do site institucional</li>
+          <li>Loja virtual completa</li>
+          <li>Painel administrativo</li>
+          <li>Integração com pagamentos</li>
+          <li>Gestão de estoque</li>
+        </ul>
+        <a href="#contact" class="preco-btn">Solicitar orçamento</a>
+      </div>
+      <div class="preco-card reveal">
+        <p class="preco-nome">Sistema ERP</p>
+        <p class="preco-valor" style="font-size:1.3rem;font-weight:600;color:#aaa;">Orçamento personalizado</p>
+        <p class="preco-desc">Para empresas que precisam automatizar processos</p>
+        <ul class="preco-lista">
+          <li>Sistema sob medida</li>
+          <li>Aplicativo mobile</li>
+          <li>Integrações via API</li>
+          <li>Suporte dedicado</li>
+          <li>Treinamento da equipe</li>
+        </ul>
+        <a href="#contact" class="preco-btn">Solicitar orçamento</a>
+      </div>
+    </div>
+    <p class="reveal" style="margin-top:40px;color:#666;font-size:0.9rem;">Sem taxas escondidas. O orçamento é gratuito e sem compromisso.</p>
+  </section>
+
+  <div style="width: 80%; max-width: 900px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.1);"></div>
+
+  <!-- CONTATO -->
+  <section id="contact">
+    <h2 class="reveal">Vamos conversar?</h2>
+    <p class="reveal">Preencha o formulário ou fale direto pelo WhatsApp.</p>
+    <form class="contact-form reveal" onsubmit="handleForm(event)" action="https://formspree.io/f/SEUID" method="POST">
+      <input type="text" name="nome" placeholder="Seu nome" required>
+      <input type="email" name="email" placeholder="Seu e-mail" required>
+      <input type="text" name="assunto" placeholder="Assunto">
+      <textarea name="mensagem" placeholder="Sua mensagem..."></textarea>
+      <input type="hidden" name="_replyto" value="isgemcorp@hotmail.com">
+      <input type="hidden" name="_subject" value="Nova mensagem pelo site GEM">
+      <button type="submit" class="contact-submit">Enviar mensagem</button>
+    </form>
+    <p class="reveal" style="color:#555;font-size:0.8rem;margin-top:12px;">Ou se preferir, envie direto: <a href="mailto:isgemcorp@hotmail.com?subject=Contato pelo site GEM" style="color:#00aaff;">isgemcorp@hotmail.com</a></p>
+    <a href="https://wa.me/5511969033592?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20GEM%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento!" target="_blank" class="contact-wpp reveal">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Chamar no WhatsApp
+    </a>
+  </section>
+
+  <div style="width: 80%; max-width: 900px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.1);"></div>
+
+  <footer class="footer-full">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="GEM FOTO.png" alt="GEM" style="height:36px;border-radius:6px;">
+        <p>Tecnologia com propósito, criada para crescer com você. Sites, apps e sistemas ERP feitos do seu jeito.</p>
+        <div class="footer-brand-socials">
+          <a href="https://www.instagram.com/isgemcorp/" target="_blank" rel="noopener noreferrer" class="footer-social-btn">IG</a>
+          <a href="https://www.linkedin.com/in/erik-costa-anjos-824772400" target="_blank" class="footer-social-btn">in</a>
+          <a href="https://www.linkedin.com/in/maxwell-rosa-8655903b5" target="_blank" class="footer-social-btn">in</a>
+          <a href="https://wa.me/5511969033592?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20GEM!" target="_blank" class="footer-social-btn">WA</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#services">Serviços</a></li>
+          <li><a href="#portfolio">Portfólio</a></li>
+          <li><a href="#como-funciona">Como funciona</a></li>
+          <li><a href="#precos">Orçamento</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contato</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="mailto:isgemcorp@hotmail.com">isgemcorp@hotmail.com</a></li>
+          <li><a href="https://wa.me/5511969033592" target="_blank">+55 11 96903-3592</a></li>
+          <li><a href="https://www.instagram.com/isgemcorp/" target="_blank" rel="noopener noreferrer">@isgemcorp</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 GEM Corp. Todos os direitos reservados.</span>
+      <span>Feito com ❤️ pela <a href="#">GEM</a></span>
+    </div>
+  </footer>
+</div>
+
+<!-- COOKIE BAR -->
+<div id="cookie-bar">
+  <p>Usamos cookies para melhorar sua experiência. Ao continuar navegando, você concorda com nossa <a href="#">política de privacidade</a>.</p>
+  <button class="cookie-btn" onclick="acceptCookies()">Entendi</button>
+</div>
+
+<script>
+  // ── TILTED CARDS ──
+  (function initTiltedCards() {
+    const amplitude = 14;
+    const scaleHover = 1.08;
+
+    document.querySelectorAll('.tilted-card-figure').forEach(fig => {
+      const inner   = fig.querySelector('.tilted-card-inner');
+      const caption = fig.querySelector('.tilted-card-caption');
+      const text    = fig.dataset.caption || '';
+
+      caption.textContent = text;
+
+      fig.addEventListener('mousemove', e => {
+        const rect = inner.getBoundingClientRect();
+        const ox = e.clientX - rect.left - rect.width / 2;
+        const oy = e.clientY - rect.top  - rect.height / 2;
+        const rx = (oy / (rect.height / 2)) * -amplitude;
+        const ry = (ox / (rect.width  / 2)) *  amplitude;
+        inner.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(${scaleHover})`;
+        caption.style.left    = (e.clientX + 12) + 'px';
+        caption.style.top     = (e.clientY + 12) + 'px';
+        caption.style.opacity = '1';
+      });
+
+      fig.addEventListener('mouseleave', () => {
+        inner.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+        caption.style.opacity = '0';
+      });
+    });
+  })();
+
+  // ── STAGGERED MENU ──
+  (function initStaggeredMenu() {
+    const panel     = document.getElementById('sm-panel');
+    const toggleBtn = document.getElementById('sm-toggle');
+    const textInner = document.getElementById('sm-toggle-text');
+    const icon      = document.getElementById('sm-icon');
+    const iconV     = icon.querySelector('.sm-icon-v');
+    const prelayers = Array.from(document.querySelectorAll('#header-wrap .sm-prelayer'));
+    const itemLabels= Array.from(panel.querySelectorAll('.sm-panel-itemLabel'));
+
+    let isOpen = false;
+
+    // posição inicial fora da tela (direita)
+    gsap.set([panel, ...prelayers], { xPercent: 100 });
+    gsap.set(itemLabels, { yPercent: 140, rotate: 10 });
+    gsap.set(iconV, { transformOrigin: '50% 50%' });
+
+    function openMenu() {
+      isOpen = true;
+      toggleBtn.setAttribute('aria-expanded', 'true');
+      panel.setAttribute('aria-hidden', 'false');
+      const tl = gsap.timeline();
+      prelayers.forEach((l, i) => tl.to(l, { xPercent: 0, duration: 0.45, ease: 'power4.out' }, i * 0.07));
+      tl.to(panel, { xPercent: 0, duration: 0.6, ease: 'power4.out' }, prelayers.length * 0.07 + 0.05);
+      tl.to(itemLabels, { yPercent: 0, rotate: 0, duration: 0.9, ease: 'power4.out', stagger: 0.08 }, '-=0.4');
+      gsap.to(iconV, { rotate: -45, duration: 0.4, ease: 'power3.out' });
+      gsap.to(textInner, { yPercent: -50, duration: 0.4, ease: 'power3.out' });
+    }
+
+    function closeMenu() {
+      isOpen = false;
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      panel.setAttribute('aria-hidden', 'true');
+      gsap.to([panel, ...prelayers], {
+        xPercent: 100, duration: 0.35, ease: 'power3.in', overwrite: 'auto',
+        onComplete: () => gsap.set(itemLabels, { yPercent: 140, rotate: 10 })
+      });
+      gsap.to(iconV, { rotate: 0, duration: 0.3, ease: 'power3.in' });
+      gsap.to(textInner, { yPercent: 0, duration: 0.3, ease: 'power3.in' });
+    }
+
+    toggleBtn.addEventListener('click', () => isOpen ? closeMenu() : openMenu());
+
+    document.addEventListener('mousedown', e => {
+      if (isOpen && !panel.contains(e.target) && !toggleBtn.contains(e.target)) closeMenu();
+    });
+  })();
+
+  // ── CARD SWAP ──
+  (function initCardSwap() {
+    const cards = Array.from(document.querySelectorAll('#cardSwap [data-card]'));
+    const total = cards.length;
+    const cardDistance = 40;
+    const verticalDistance = 50;
+    const skew = 6;
+    const delay = 5000;
+
+    const makeSlot = (i) => ({
+      x: i * cardDistance,
+      y: -i * verticalDistance,
+      z: -i * cardDistance * 1.5,
+      zIndex: total - i
+    });
+
+    const order = cards.map((_, i) => i);
+
+    // centraliza os cards dentro do cs-outer-body
+    cards.forEach((el, i) => {
+      const s = makeSlot(i);
+      gsap.set(el, {
+        x: s.x, y: s.y, z: s.z,
+        xPercent: -50, yPercent: -50,
+        skewY: skew,
+        transformOrigin: 'center center',
+        zIndex: s.zIndex,
+        force3D: true,
+        position: 'absolute',
+        top: '50%',
+        left: '50%'
+      });
+    });
+
+    function swap() {
+      const front = order[0];
+      const rest  = order.slice(1);
+      const elFront = cards[front];
+      const tl = gsap.timeline();
+
+      // card da frente desce completamente primeiro
+      tl.to(elFront, { y: '+=420', duration: 1.0, ease: 'power1.inOut' });
+
+      // só depois os outros sobem
+      rest.forEach((idx, i) => {
+        const s = makeSlot(i);
+        tl.set(cards[idx], { zIndex: s.zIndex }, `>-0.05`);
+        tl.to(cards[idx], { x: s.x, y: s.y, z: s.z, duration: 0.8, ease: 'power2.out' }, i === 0 ? '>' : '<0.1');
+      });
+
+      // card volta para o fundo da pilha
+      const backSlot = makeSlot(total - 1);
+      tl.call(() => gsap.set(elFront, { zIndex: backSlot.zIndex }));
+      tl.to(elFront, { x: backSlot.x, y: backSlot.y, z: backSlot.z, duration: 0.6, ease: 'power2.out' }, '>-0.2');
+      tl.call(() => { order.push(order.shift()); });
+    }
+
+    swap();
+    setInterval(swap, delay);
+  })();
+
+  // ── SCROLL PROGRESS BAR ──
+  const scrollBar = document.getElementById('scroll-bar');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    scrollBar.style.width = pct + '%';
+  }, { passive: true });
+
+  // ── SCROLL REVEAL ──
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ── CONTADORES ANIMADOS ──
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = +el.dataset.target;
+      const duration = 1800;
+      const step = 16;
+      const increment = target / (duration / step);
+      let current = 0;
+      const timer = setInterval(() => {
+        current = Math.min(current + increment, target);
+        el.textContent = Math.floor(current) + (el.dataset.suffix || '');
+        if (current >= target) clearInterval(timer);
+      }, step);
+      counterObserver.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-num[data-target]').forEach(el => counterObserver.observe(el));
+
+  // ── FORM HANDLER ──
+  function handleForm(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = form.querySelector('.contact-submit');
+    const data = new FormData(form);
+
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    }).then(res => {
+      if (res.ok) {
+        btn.textContent = 'Mensagem enviada! ✓';
+        btn.style.background = '#25D366';
+        form.reset();
+      } else {
+        btn.textContent = 'Erro ao enviar. Tente pelo WhatsApp.';
+        btn.style.background = '#ff5f57';
+      }
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = 'Enviar mensagem'; btn.style.background = ''; }, 4000);
+    }).catch(() => {
+      btn.textContent = 'Sem conexão. Tente pelo WhatsApp.';
+      btn.style.background = '#ff5f57';
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = 'Enviar mensagem'; btn.style.background = ''; }, 4000);
+    });
+  }
+
+  // ── REVEAL INICIAL (elementos já visíveis) ──
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) el.classList.add('visible');
+    });
+  }, 100);
+
+
+  // ── CURSOR PERSONALIZADO ──
+  (function initCursor() {
+    const cur  = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    if (!cur || !ring) return;
+    let rx = 0, ry = 0, mx = 0, my = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx+'px'; cur.style.top = my+'px'; });
+    (function animRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx+'px';
+      ring.style.top  = ry+'px';
+      requestAnimationFrame(animRing);
+    })();
+  })();
+
+  // ── COOKIES ──
+  function acceptCookies() {
+    localStorage.setItem('gem_cookies', '1');
+    document.getElementById('cookie-bar').classList.remove('show');
+  }
+  if (!localStorage.getItem('gem_cookies')) {
+    setTimeout(() => document.getElementById('cookie-bar').classList.add('show'), 2000);
+  }
+
+  // ── FAQ ──
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // ── ANIMAÇÕES DEMO ──
+  (function initDemos() {
+    const phrases = ['Seu site.', 'Sua marca.', 'Seu estilo.', 'Do seu jeito.'];
+    let pi = 0, ci = 0, deleting = false;
+    const el = document.getElementById('typingEl');
+    if (el) {
+      setInterval(() => {
+        const phrase = phrases[pi];
+        if (!deleting) {
+          el.textContent = phrase.slice(0, ++ci);
+          if (ci === phrase.length) { deleting = true; }
+        } else {
+          el.textContent = phrase.slice(0, --ci);
+          if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+        }
+      }, 110);
+    }
+    window.ripple = function(e, btn) {
+      const r = document.createElement('span');
+      const d = Math.max(btn.offsetWidth, btn.offsetHeight);
+      const rect = btn.getBoundingClientRect();
+      r.className = 'ripple-circle';
+      r.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX-rect.left-d/2}px;top:${e.clientY-rect.top-d/2}px`;
+      btn.appendChild(r);
+      setTimeout(() => r.remove(), 500);
+    };
+    const demoNums = document.querySelectorAll('.demo-num[data-max]');
+    const demoObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target, max = +el.dataset.max;
+        let v = 0;
+        const t = setInterval(() => { v = Math.min(v + Math.ceil(max/40), max); el.textContent = v; if (v >= max) clearInterval(t); }, 30);
+        demoObs.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    demoNums.forEach(n => demoObs.observe(n));
+    const track = document.getElementById('demoSlide');
+    if (track) {
+      let idx = 0;
+      const items = Array.from(track.querySelectorAll('.demo-slide-item'));
+      const dots  = Array.from(document.querySelectorAll('.dsd'));
+      setInterval(() => {
+        items[idx].classList.remove('active');
+        dots[idx].classList.remove('active');
+        idx = (idx + 1) % items.length;
+        items[idx].classList.add('active');
+        dots[idx].classList.add('active');
+      }, 2000);
+    }
+  })();
+
+  const introText = "Bem vindo a GEM!";
+  const container = document.getElementById("intro-text");
+
+  introText.split("").forEach(char => {
+    if (char === " ") {
+      const space = document.createElement("span");
+      space.className = "split-space";
+      container.appendChild(space);
+    } else {
+      const span = document.createElement("span");
+      span.className = "split-char";
+      span.textContent = char;
+      container.appendChild(span);
+    }
+  });
+
+  const chars = document.querySelectorAll(".split-char");
+  const intro = document.getElementById("intro");
+  const site  = document.getElementById("site");
+
+  gsap.to(chars, {
+    opacity: 1,
+    y: 0,
+    duration: 0.6,
+    ease: "power3.out",
+    stagger: 0.07,
+    delay: 0.3,
+    onComplete: () => {
+      // dispara o raio
+      const bolt = document.getElementById('lightning');
+      bolt.classList.add('fire');
+
+      // após o raio, fecha o intro
+      gsap.delayedCall(0.9, () => {
+        intro.classList.add("hide");
+        site.classList.add("show");
+      });
+    }
+  });
+</script>
+
+<script>
+  // ── PLASMA BACKGROUND (WebGL) ──
+  (function initPlasma() {
+    const canvas = document.getElementById('plasma-canvas');
+    const gl = canvas.getContext('webgl', { powerPreference: 'high-performance', antialias: false, depth: false, stencil: false })
+            || canvas.getContext('experimental-webgl');
+    if (!gl) return;
+
+    const RENDER_SCALE = 0.3; // renderiza a 30% — CSS estica, GPU não sofre
+
+    const vert = `attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
+    const frag = `
+      precision lowp float;
+      uniform float t;
+      uniform vec2  r;
+      void main(){
+        vec2 p=(gl_FragCoord.xy/r-0.5)*2.86;
+        float v=sin(p.x*3.+t)+sin(p.y*3.-t*.8)+sin((p.x+p.y)*2.5-t*1.2)+sin(p.x*1.5-p.y*2.+t*.6);
+        v=v*.25+.5;
+        gl_FragColor=vec4(vec3(0.231,0.510,0.965)*(.5+.5*v),0.15);
+      }
+    `;
+
+    function sh(type, src) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src); gl.compileShader(s); return s;
+    }
+    const prog = gl.createProgram();
+    gl.attachShader(prog, sh(gl.VERTEX_SHADER, vert));
+    gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, frag));
+    gl.linkProgram(prog); gl.useProgram(prog);
+
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+    const ap = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(ap);
+    gl.vertexAttribPointer(ap, 2, gl.FLOAT, false, 0, 0);
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    const uT = gl.getUniformLocation(prog, 't');
+    const uR = gl.getUniformLocation(prog, 'r');
+
+    function resize() {
+      canvas.width  = Math.floor(window.innerWidth  * RENDER_SCALE);
+      canvas.height = Math.floor(window.innerHeight * RENDER_SCALE);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.uniform2f(uR, canvas.width, canvas.height);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    let start = null, raf = null;
+    function loop(ts) {
+      if (!start) start = ts;
+      gl.clearColor(0,0,0,1);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform1f(uT, (ts - start) * -0.0008);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      raf = requestAnimationFrame(loop);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { cancelAnimationFrame(raf); start = null; }
+      else raf = requestAnimationFrame(loop);
+    });
+
+    raf = requestAnimationFrame(loop);
+  })();
+</script>
+
+</body>
+</html>
