@@ -1207,8 +1207,12 @@
     /* ── COOKIES ── */
     #cookie-bar {
       position: fixed;
-      bottom: 24px; left: 50%;
-      transform: translateX(-50%) translateY(120px);
+      bottom: 24px;
+      left: 16px;
+      right: 16px;
+      width: auto;
+      max-width: 560px;
+      margin: 0 auto;
       background: rgba(15,15,15,0.95);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 14px;
@@ -1217,13 +1221,14 @@
       align-items: center;
       gap: 20px;
       z-index: 9997;
-      max-width: 560px;
-      width: calc(100% - 48px);
       backdrop-filter: blur(12px);
-      transition: transform .5s cubic-bezier(.34,1.56,.64,1);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: opacity .4s ease, transform .4s ease;
       box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     }
-    #cookie-bar.show { transform: translateX(-50%) translateY(0); }
+    #cookie-bar.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
     #cookie-bar p { margin: 0; font-size: 0.82rem; color: #aaa; line-height: 1.5; flex: 1; }
     #cookie-bar p a { color: #00aaff; text-decoration: none; }
     .cookie-btn {
@@ -1246,7 +1251,6 @@
       #cookie-bar { flex-direction: column; text-align: center; }
       #cursor, #cursor-ring { display: none; }
     }
-
     /* ══════════════════════════════
        RESPONSIVIDADE — MOBILE/TABLET
     ══════════════════════════════ */
@@ -1358,15 +1362,8 @@
       .footer-grid { grid-template-columns: 1fr; gap: 28px; }
       .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
 
-      /* Cookie — fica na base sem sobrepor conteúdo */
-      #cookie-bar {
-        flex-direction: column;
-        text-align: center;
-        padding: 16px;
-        bottom: 12px;
-        width: calc(100% - 32px);
-        font-size: 0.78rem;
-      }
+      /* Cookie */
+      #cookie-bar { flex-direction: column; text-align: center; padding: 14px; font-size: 0.78rem; }
 
       /* Scroll reveal */
       .reveal { transform: translateY(16px); }
@@ -1442,7 +1439,7 @@
         </div>
       </aside>
       <header>
-        <h1><img src="GEM FOTO.png" alt="GEM" style="height: 40px; border-radius: 8px; vertical-align: middle;"></h1>
+        <h1><img src="GEM FOTO.png" alt="GEM" id="gem-logo" style="height: 40px; border-radius: 8px; vertical-align: middle; cursor: pointer;"></h1>
         <span class="header-tagline">Veja exemplos abaixo: <span style="color:#00aaff;">Deixamos seu site a sua cara!</span></span>
         <button class="sm-toggle-btn" id="sm-toggle" aria-expanded="false" aria-controls="sm-panel">
           <span class="sm-toggle-text-wrap"><span class="sm-toggle-text-inner" id="sm-toggle-text"><span>Clique Aqui</span><span>Fechar</span></span></span>
@@ -2163,12 +2160,13 @@
   }
 
   // ── REVEAL INICIAL (elementos já visíveis) ──
-  setTimeout(() => {
+  // Só roda DEPOIS que o intro fecha, para não causar scroll indesejado
+  function initReveal() {
     document.querySelectorAll('.reveal').forEach(el => {
       const rect = el.getBoundingClientRect();
       if (rect.top < window.innerHeight) el.classList.add('visible');
     });
-  }, 100);
+  }
 
 
   // ── CURSOR PERSONALIZADO ──
@@ -2292,6 +2290,7 @@
       gsap.delayedCall(0.9, () => {
         intro.classList.add("hide");
         site.classList.add("show");
+        setTimeout(initReveal, 900); // roda após a transição do intro
       });
     }
   });
@@ -2369,6 +2368,102 @@
     raf = requestAnimationFrame(loop);
   })();
 </script>
+
+<script>
+  // ── EASTER EGG — Logo GEM ──
+  (function initEasterEgg() {
+    const logo = document.getElementById('gem-logo');
+    if (!logo) return;
+
+    let clicks = 0, timer = null;
+
+    // overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'egg-overlay';
+    overlay.style.cssText = `
+      position:fixed;inset:0;z-index:99999;
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      background:rgba(0,0,0,0);
+      pointer-events:none;
+      transition:background .4s ease;
+    `;
+    document.body.appendChild(overlay);
+
+    const msg = document.createElement('div');
+    msg.style.cssText = `
+      font-size:clamp(1.4rem,4vw,2.2rem);font-weight:800;
+      color:#fff;letter-spacing:-0.5px;text-align:center;
+      opacity:0;transform:scale(0.7) translateY(20px);
+      transition:opacity .5s ease,transform .5s ease;
+      text-shadow:0 0 30px rgba(0,170,255,0.8);
+      padding:0 24px;line-height:1.4;
+      pointer-events:none;
+    `;
+    msg.innerHTML = '🚀 Você encontrou o easter egg da GEM!<br><span style="font-size:0.6em;opacity:0.6;font-weight:400;">Obrigado por explorar nosso site ✦</span>';
+    overlay.appendChild(msg);
+
+    function burst() {
+      overlay.style.background = 'rgba(0,0,0,0.75)';
+      overlay.style.pointerEvents = 'auto';
+      msg.style.opacity = '1';
+      msg.style.transform = 'scale(1) translateY(0)';
+
+      // partículas
+      const colors = ['#00aaff','#3B82F6','#9333ea','#00ffd1','#ff5c7a','#febc2e','#fff'];
+      for (let i = 0; i < 80; i++) {
+        const p = document.createElement('span');
+        const size = 6 + Math.random() * 10;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const x = Math.random() * 100;
+        const delay = Math.random() * 0.6;
+        const dur = 1.2 + Math.random() * 1.2;
+        p.style.cssText = `
+          position:fixed;
+          left:${x}vw;top:-20px;
+          width:${size}px;height:${size}px;
+          border-radius:${Math.random()>0.5?'50%':'3px'};
+          background:${color};
+          pointer-events:none;
+          z-index:100000;
+          animation:eggFall ${dur}s ${delay}s ease-in forwards;
+        `;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), (dur + delay + 0.2) * 1000);
+      }
+
+      // fecha ao clicar
+      overlay.addEventListener('click', close, { once: true });
+      setTimeout(close, 4000);
+    }
+
+    function close() {
+      overlay.style.background = 'rgba(0,0,0,0)';
+      overlay.style.pointerEvents = 'none';
+      msg.style.opacity = '0';
+      msg.style.transform = 'scale(0.7) translateY(20px)';
+    }
+
+    logo.addEventListener('click', () => {
+      clicks++;
+      // feedback visual a cada clique
+      logo.style.transform = 'scale(1.2) rotate(10deg)';
+      setTimeout(() => logo.style.transform = '', 200);
+
+      clearTimeout(timer);
+      if (clicks >= 5) { clicks = 0; burst(); return; }
+      timer = setTimeout(() => clicks = 0, 2000);
+    });
+  })();
+</script>
+
+<style>
+  @keyframes eggFall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+  #gem-logo { transition: transform .2s ease; }
+</style>
 
 </body>
 </html>
