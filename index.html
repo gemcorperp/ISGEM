@@ -90,6 +90,8 @@
     /* ── SITE ── */
     #site { opacity: 0; transition: opacity 0.8s ease; position: relative; z-index: 1; }
     #site.show { opacity: 1; }
+    /* trava scroll durante intro */
+    body.intro-active { overflow: hidden; height: 100vh; }
 
     #header-wrap { position: relative; }
     header { padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 20; }
@@ -1388,6 +1390,13 @@
 <!-- SCROLL PROGRESS -->
 <div id="scroll-bar"></div>
 
+<script>
+  // Trava scroll e garante topo antes do intro
+  document.body.classList.add('intro-active');
+  window.scrollTo(0, 0);
+  history.scrollRestoration = 'manual';
+</script>
+
 <!-- WHATSAPP FLUTUANTE REMOVIDO -->
 
 <!-- INTRO -->
@@ -2290,7 +2299,9 @@
       gsap.delayedCall(0.9, () => {
         intro.classList.add("hide");
         site.classList.add("show");
-        setTimeout(initReveal, 900); // roda após a transição do intro
+        document.body.classList.remove('intro-active');
+        window.scrollTo(0, 0);
+        setTimeout(initReveal, 900);
       });
     }
   });
