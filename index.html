@@ -1277,106 +1277,177 @@
 
     /* Mobile (≤ 600px) */
     @media (max-width: 600px) {
-      /* Header */
-      header { padding: 14px 16px; gap: 8px; }
-      .header-tagline { display: none; }
-      header h1 img { height: 32px !important; }
-      .sm-toggle-btn { padding: 8px 16px; font-size: 0.85rem; }
-
-      /* Hero — empilha tagline + card */
-      .hero { height: auto; padding: 32px 0 24px; }
-      .hero-content { flex-direction: column; padding: 0 16px; gap: 24px; }
-      .hero-left { max-width: 100%; }
-      .hero-tagline strong { font-size: clamp(1.6rem, 7vw, 2.2rem); }
-
-      /* Card swap — tamanho proporcional à tela */
-      .card-swap-wrapper {
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        aspect-ratio: 4/3;
-        min-height: 220px;
+      /* ── Header glassmorphism ── */
+      header {
+        padding: 12px 16px;
+        background: rgba(0,0,0,0.6);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+        position: sticky;
+        top: 0;
+        z-index: 100;
       }
-      .cs-card { width: 88%; height: 75%; }
+      .header-tagline { display: none; }
+      header h1 img { height: 34px !important; }
+      .sm-toggle-btn { padding: 8px 18px; font-size: 0.82rem; gap: 6px; }
+
+      /* ── Hero ── */
+      .hero { height: auto; padding: 40px 0 32px; }
+      .hero-content { flex-direction: column; padding: 0 20px; gap: 28px; }
+      .hero-left { max-width: 100%; }
+      .hero-tagline strong {
+        font-size: clamp(1.8rem, 7.5vw, 2.4rem);
+        letter-spacing: -1.5px;
+      }
+      .hero-tagline em { margin-top: 12px; }
+
+      /* ── Card swap ── */
+      .card-swap-wrapper {
+        width: 100%; max-width: 100%;
+        height: auto; aspect-ratio: 4/3; min-height: 220px;
+      }
+      .cs-outer-window { border-radius: 12px; }
+      .cs-card { width: 86%; height: 74%; border-radius: 8px; }
       .cs-card-body { padding: 16px; gap: 8px; }
       .cs-card-body h3 { font-size: 1rem; }
-      .cs-card-body p  { font-size: 0.82rem; }
-      .cs-outer-title { font-size: 0.72rem; }
-      .cs-outer-url-bar { padding: 3px 8px; margin: 0 8px; }
+      .cs-card-body p  { font-size: 0.8rem; }
+      .cs-outer-title { font-size: 0.7rem; }
+      .cs-outer-url-bar { padding: 3px 8px; margin: 0 6px; }
 
-      /* Tilted cards */
-      .tilted-card-figure,
-      .tilted-card-inner { width: 100%; max-width: 100%; height: 200px; }
-      .tilted-row { flex-direction: column; align-items: center; gap: 16px; padding: 24px 16px; }
-      .tilted-card-overlay p { opacity: 1; transform: translateY(0); }
-      .tilted-card-overlay { background: rgba(0,0,0,0.45); }
+      /* ── Tilted cards ── */
+      .tilted-row { flex-direction: column; align-items: center; gap: 14px; padding: 20px 20px; }
+      .tilted-card-figure { width: 100%; height: auto; gap: 8px; }
+      .tilted-card-inner { width: 100%; height: 180px; border-radius: 12px; }
+      .tilted-card-img { border-radius: 12px; }
+      .tilted-card-overlay { border-radius: 12px; background: rgba(0,0,0,0.5) !important; }
+      .tilted-card-overlay p { opacity: 1 !important; transform: none !important; font-size: 1rem; }
+      .tilted-card-label { font-size: 0.75rem; }
 
-      /* Seções gerais */
-      section { padding: 40px 16px; }
+      /* ── Seções gerais ── */
+      section { padding: 48px 20px; }
       #sobre, #animacoes, #como-funciona, #diferenciais,
-      #faq, #portfolio, #tecnologias, #precos, #contact { padding: 40px 16px !important; }
+      #faq, #portfolio, #tecnologias, #precos, #contact { padding: 48px 20px !important; }
 
-      /* Instagram */
-      #instagram-section { padding: 40px 16px !important; gap: 20px; flex-direction: column; }
-      #instagram-section img { width: 65vw !important; max-width: 240px; }
+      /* ── Títulos de seção ── */
+      h2 { font-size: clamp(1.6rem, 6vw, 2rem) !important; }
 
-      /* Demo grid */
-      .demo-grid { grid-template-columns: 1fr; gap: 16px; }
-      .demo-counters { gap: 12px; }
-      .demo-num { font-size: 1.5rem; }
+      /* ── Instagram ── */
+      #instagram-section {
+        padding: 48px 20px !important;
+        gap: 24px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      #instagram-section img { width: 60vw !important; max-width: 220px; }
+      #instagram-section > div:last-child { min-width: unset; }
 
-      /* Steps */
-      .steps-grid { grid-template-columns: 1fr; gap: 28px; }
+      /* ── Demo grid ── */
+      .demo-grid { grid-template-columns: 1fr; gap: 14px; }
+      .demo-card { padding: 20px; border-radius: 14px; }
+      .demo-counters { gap: 16px; }
+      .demo-num { font-size: 1.6rem; }
+
+      /* ── Steps ── */
+      .steps-grid { grid-template-columns: 1fr; gap: 24px; }
       .steps-grid::before { display: none; }
-      .step-num { width: 56px; height: 56px; font-size: 1.2rem; }
+      .step-item {
+        flex-direction: row;
+        align-items: flex-start;
+        text-align: left;
+        gap: 16px;
+        padding: 0;
+      }
+      .step-num { width: 48px; height: 48px; font-size: 1.1rem; flex-shrink: 0; }
+      .step-title { font-size: 0.95rem; }
+      .step-desc { font-size: 0.82rem; }
 
-      /* Diferenciais */
+      /* ── Diferenciais ── */
       .dif-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-      .dif-card { padding: 20px 16px; }
+      .dif-card { padding: 20px 14px; border-radius: 14px; }
+      .dif-icon { font-size: 1.6rem; margin-bottom: 10px; }
+      .dif-title { font-size: 0.9rem; }
+      .dif-desc { font-size: 0.78rem; }
 
-      /* FAQ */
-      .faq-q { font-size: 0.9rem; padding: 16px 0; }
+      /* ── FAQ ── */
+      .faq-q { font-size: 0.88rem; padding: 14px 0; }
+      .faq-a { font-size: 0.85rem; }
 
-      /* Portfólio */
-      .port-grid { grid-template-columns: 1fr; }
-      .port-card-overlay { opacity: 1; }
+      /* ── Portfólio ── */
+      .port-grid { grid-template-columns: 1fr; gap: 14px; }
+      .port-card { border-radius: 12px; }
+      .port-card-overlay { opacity: 1; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 55%) !important; }
+      .port-card-title { font-size: 0.9rem; }
 
-      /* Tech pills */
-      .tech-pill { padding: 8px 14px; font-size: 0.82rem; }
+      /* ── Tech pills ── */
+      .tech-grid { gap: 10px; }
+      .tech-pill { padding: 7px 14px; font-size: 0.8rem; border-radius: 20px; }
 
-      /* Preços */
-      .preco-grid { grid-template-columns: 1fr; max-width: 100%; }
-      .preco-card { padding: 28px 20px; }
+      /* ── Preços ── */
+      .preco-grid { grid-template-columns: 1fr; max-width: 100%; gap: 20px; }
+      .preco-card { padding: 28px 20px; border-radius: 16px; }
+      .preco-nome { font-size: 0.72rem; }
+      .preco-lista li { font-size: 0.85rem; }
 
-      /* Contato */
+      /* ── Contato ── */
+      .contact-form { gap: 12px; }
       .contact-form input,
-      .contact-form textarea { padding: 12px 14px; font-size: 0.9rem; }
-      .contact-wpp { padding: 12px 16px; font-size: 0.9rem; }
+      .contact-form textarea { padding: 13px 14px; font-size: 0.9rem; border-radius: 10px; }
+      .contact-submit { padding: 13px; font-size: 0.95rem; }
+      .contact-wpp { padding: 13px 16px; font-size: 0.9rem; border-radius: 10px; }
 
-      /* Menu lateral — tela cheia no mobile */
-      .sm-prelayers,
-      .sm-panel { width: 100% !important; }
-      .sm-panel { padding: 70px 28px 32px; }
-      .sm-panel-item { font-size: clamp(1.8rem, 8vw, 2.8rem); }
+      /* ── Menu lateral ── */
+      .sm-prelayers, .sm-panel { width: 100% !important; }
+      .sm-panel { padding: 72px 24px 32px; }
+      .sm-panel-item { font-size: clamp(1.8rem, 8vw, 2.8rem); letter-spacing: -1.5px; }
 
-      /* Rodapé */
-      .footer-full { padding: 40px 16px 24px; }
+      /* ── Badge ── */
+      .badge-pill { font-size: 0.78rem; padding: 8px 16px; }
+
+      /* ── Rodapé ── */
+      .footer-full { padding: 40px 20px 24px; }
       .footer-grid { grid-template-columns: 1fr; gap: 28px; }
-      .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 8px; font-size: 0.75rem; }
+      .footer-brand p { font-size: 0.82rem; }
 
-      /* Cookie */
-      #cookie-bar { flex-direction: column; text-align: center; padding: 14px; font-size: 0.78rem; }
+      /* ── Cookie ── */
+      #cookie-bar { flex-direction: column; text-align: center; padding: 14px 16px; gap: 12px; }
+      #cookie-bar p { font-size: 0.78rem; }
 
-      /* Scroll reveal */
+      /* ── Scroll reveal ── */
       .reveal { transform: translateY(16px); }
+
+      /* ── WhatsApp flutuante só no mobile ── */
+      #wpp-mobile {
+        display: flex !important;
+      }
     }
+
+    /* ── WhatsApp flutuante mobile ── */
+    #wpp-mobile {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 52px; height: 52px;
+      background: #25D366;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      z-index: 9990;
+      box-shadow: 0 4px 16px rgba(37,211,102,0.5);
+      text-decoration: none;
+      animation: wppPulse 2.5s ease-in-out infinite;
+    }
+    #wpp-mobile svg { width: 26px; height: 26px; fill: #fff; }
 
     /* Muito pequeno (≤ 380px) */
     @media (max-width: 380px) {
-      .sm-toggle-btn { padding: 7px 12px; font-size: 0.78rem; }
+      .sm-toggle-btn { padding: 7px 12px; font-size: 0.76rem; }
       .dif-grid { grid-template-columns: 1fr; }
       .card-swap-wrapper { min-height: 180px; }
       .cs-card { height: 72%; }
+      .step-item { gap: 12px; }
     }
 
   </style>
@@ -1946,6 +2017,11 @@
 
 <!-- COOKIE BAR -->
 <div id="cookie-bar">
+
+<!-- WPP MOBILE -->
+<a id="wpp-mobile" href="https://wa.me/5511969033592?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20GEM%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento!" target="_blank" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
   <p>Usamos cookies para melhorar sua experiência. Ao continuar navegando, você concorda com nossa <a href="#">política de privacidade</a>.</p>
   <button class="cookie-btn" onclick="acceptCookies()">Entendi</button>
 </div>
